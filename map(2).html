@@ -1,0 +1,148 @@
+<html>
+	<head>
+		<title>Terkep aplikacio</title>
+		<style type="text/css">
+			body
+			{
+				margin: 0px;
+			}
+			#map
+			{
+				width: 100%;
+				height: 100%;
+				background: green;
+				cursor: crosshair;
+				background-image: url("map.png");
+				background-repeat:no-repeat;
+				background-position: 50px 50px;
+				background-size:100%;
+			}
+			#controlPanel
+			{
+				width:200px;
+				
+				position: absolute;
+				top:10px;
+				left: 15px;
+				background: red;
+				padding: 10px;
+			}
+
+			#navLeft
+			{
+				background: green;
+				width: 100px;
+				height: 90px;
+				position: absolute;
+				left: 10px;
+				top: 150px;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="controlPanel">
+			Kontrol panel 
+			<input type="button" value="+" onmousedown="resizeMapLarger()" />
+			<input type="button" value="-" onmousedown="resizeMapSmaller()"/>
+			<div id="controlPanelLastClick">last click:</div>
+			<div id="controlPanelCursorLive">cursor now:</div>
+			<div id="controlPanelPositionsCurrent">x: N/A ; y: N/A</div>
+			<div id="controlPanelPositions">offset:</br></div>
+		</div>
+	<div id="map" onmousedown="start()" onmouseup="stop()" onclick="pos()">
+		
+	</div>
+
+	</body>
+	<script type="text/javascript">
+		var cursorX=0;
+		var cursorY=0;
+		var x=0;
+		var y=0;
+		var scale = 100;
+
+
+		document.onmousemove = function(e){
+		    cursorX = e.pageX;
+		    cursorY = e.pageY;
+  			document.getElementById("controlPanelCursorLive").innerHTML=
+					"cursor now: <br>x: " + cursorX
+					+ "; y:" + cursorY;
+
+		}
+
+		function currentxy()
+		{
+			document.getElementById("controlPanelPositionsCurrent").innerHTML = 
+				"x: " + cursorY +" ; y:" + cursorX;
+		}
+		//setInterval(function{currentxy()},100);
+		var startX = 0;
+		var startY = 0;
+		var stopX = 0;
+		var stopY = 0;
+		var offsetX = 0;
+		var offsetY = 0;
+
+
+		function start()
+		{
+			startX = cursorX;
+			startY = cursorY;
+
+	//		document.getElementById("map").style.backgroundPosition= 
+	//			cursorY + "px  " + cursorY;
+		}
+
+		function stop()
+		{
+			stopX = cursorX;
+			stopY = cursorY;
+
+			offsetX = stopX-startX;
+			offsetY = stopY-startY;
+
+
+			x +=offsetX;
+			y +=offsetY;
+
+			document.getElementById("controlPanelPositions").innerHTML=
+					"offset: <br>x: " + offsetX
+					+ "; y:" + offsetY;
+
+			document.getElementById("controlPanelPositionsCurrent").innerHTML=
+					"topleft: <br>x: " + x
+					+ "; y:" + y;
+
+			document.getElementById("map").style.backgroundPosition=
+				x+"px "+y+"px";
+
+
+
+		}
+
+		function pos()
+		{
+			realx = cursorX+(-x);
+			realy = cursorY+(-y);
+			document.getElementById("controlPanelLastClick").innerHTML=
+					"last click: <br>x: " + realx
+					+ "; y:" + realy;
+		}
+
+		function resizeMapSmaller()
+		{
+			scale-=10;
+			document.getElementById("map").style.backgroundSize=scale+"%";
+		}
+
+		function resizeMapLarger()
+		{
+			scale+=10;
+			document.getElementById("map").style.backgroundSize=scale+"%";
+		}
+
+	</script>
+
+</html>
